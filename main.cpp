@@ -1,9 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <cmath>
 #include <string>
-#include <limits>
-#include <array>
 
 
 class Shape {
@@ -78,11 +75,11 @@ public:
     }
 
     double area() const override {
-        return std::numeric_limits<double>::infinity();
+        return 10000000;
     }
 
     double perimeter() const override {
-        return std::numeric_limits<double>::infinity();
+        return 0;
     }
 
     std::string getname() const override {
