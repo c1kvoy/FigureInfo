@@ -62,9 +62,13 @@ class Plane : public Shape {
 private:
     T A, B, C, D;
     std::string name;
+
 public:
-    Plane(T A, T B, T C, T D) : A(A), B(B), C(C), D(D) {}
-    Plane(const Point<T>& p1, const Point<T>& p2, const Point<T>& p3) {
+    Plane(T A, T B, T C, T D, const std::string& name) 
+        : A(A), B(B), C(C), D(D), name(name) {}
+
+    Plane(const Point<T>& p1, const Point<T>& p2, const Point<T>& p3, const std::string& name) 
+        : name(name) {
         Point<T> v1 = p2.vector_by_two_points(p1);
         Point<T> v2 = p3.vector_by_two_points(p1);
         Point<T> normal = v1.vector_multiply(v2);
@@ -73,6 +77,9 @@ public:
         C = normal.z;
         D = -(A * p1.x + B * p1.y + C * p1.z);
     }
+
+    Plane(T A, T B, T C, T D) 
+        : A(A), B(B), C(C), D(D), name("") {}
 
     double area() const override {
         return 10000000;
@@ -83,12 +90,11 @@ public:
     }
 
     std::string getname() const override {
-        return name.empty() ? "Плоскость без имени" : name;
+        return name.empty() ? "Плоскость имени" : name;
     }
 
     void print(std::ostream& os) const override {
         os << "Плоскость: " << name << "\n";
-        os << A << "x + " << B << "y + " << C << "z + " << D << " = 0";
     }
 };
 
@@ -263,7 +269,7 @@ int main() {
                 std::string name;
                 std::cout << "Доступные точки:\n";
                 for (size_t i = 0; i < points.size(); ++i) {
-                    std::cout << i + 1 << "  " << points[i].name <<  ": " << points[i] << "\n";
+                    std::cout << i + 1 << "  " << points[i].getname() <<  ": " << points[i] << "\n";
                 }
                 std::array<int, 3> idx;
                 std::cout << "Выберете три точки из них (например 1 2 3): ";
@@ -309,12 +315,18 @@ int main() {
                     std::cout << "Неправильные индексы выбраны!\n";
                     continue;
                 }
-                shapes.push_back(new Plane<double>(points[idx[0]], points[idx[1]], points[idx[2]]));
+                std::string name;
+                std::cout << "Введите имя для плоскости" << "\n ";
+                std::cin >> name;
+                shapes.push_back(new Plane<double>(points[idx[0]], points[idx[1]], points[idx[2]], name));
             } else if (subChoice == 2) {
                 double x1, y1, z1, x2, y2, z2, x3, y3, z3;
                 std::cout << "Выберет координаты для плоскости (x1 y1 z1 x2 y2 z2 x3 y3 z3): ";
                 std::cin >> x1 >> y1 >> z1 >> x2 >> y2 >> z2 >> x3 >> y3 >> z3;
-                shapes.push_back(new Plane<double>(Point<double>(x1, y1, z1), Point<double>(x2, y2, z2), Point<double>(x3, y3, z3)));
+                std::string name;
+                std::cout << "Введите имя для плоскости" << "\n ";
+                std::cin >> name;
+                shapes.push_back(new Plane<double>(Point<double>(x1, y1, z1), Point<double>(x2, y2, z2), Point<double>(x3, y3, z3), name));
             } else if (subChoice == 3) {
                 continue;
             }
